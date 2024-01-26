@@ -1,6 +1,6 @@
 from . import db 
 from flask_login import UserMixin #Implements properties and methods of flask-login to make it easier
-
+from flask_sqlalchemy import SQLAlchemy
 from enum import Enum
 
 
@@ -25,7 +25,22 @@ class User(db.Model, UserMixin):
     avatar = db.Column(db.Integer, db.ForeignKey('image.id'))
     # role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
 
+def __repr__(self):
+    return f'<User {self.email}>'
 
+def serialize(self): #Return the object serialized in dict/JSON 
+    return{
+        "id": self.id,
+        "username": self.username,
+        "email": self.email,
+        "phone": self.phone,
+        "is_active": self.is_active,
+        "role": self.role,
+        "avatar": self.avatar
+    }
+
+    
+    
     
 
 # class Role(db.Model):
@@ -71,4 +86,4 @@ class Category(db.Model):
 class Subcategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id', nullable=False))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
