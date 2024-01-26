@@ -39,7 +39,7 @@ class Image(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
-
+    
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,3 +60,15 @@ class Reply(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    
+    
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), unique=True)
+    # parent_id = db.Column(db.Integer, db.ForeignKey())
+    
+class Subcategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), unique=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id', nullable=False))
