@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
-import Container from 'react'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -11,8 +10,8 @@ function Layout() {
     <div className='mx-auto'>
 <nav className="navbar navbar-expand-lg bg-body-tertiary justify-content-center position-absolute top-0 start-50 translate-middle-x">
         <div className="container-fluid mx-auto">
-          <Link className="navbar-brand " to="/" style={{marginRight: '10rem'}}>
-            Navbar
+          <Link className="navbar-brand " to="/" style={{marginRight: '5rem'}}>
+            Logo
           </Link>
           <button
             className="navbar-toggler"
@@ -27,22 +26,33 @@ function Layout() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
+              {/* <li className="nav-item">
+                <Link className="nav-link active " to="/dashboard" style={{marginRight: '5rem'}}>
+                  Dashboard
+                </Link>
+              </li> */}
               <li className="nav-item">
-                <Link className="nav-link active " to="/menu" style={{marginRight: '10rem'}}>
-                  Menu
+                <Link className="nav-link active " to="/categories" style={{marginRight: '5rem'}}>
+                  Categories
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link " to="/contact" style={{marginRight: '10rem'}}>
+                <Link className="nav-link active" to="/roles" style={{marginRight: '5rem'}}>
+                  Roles
+                </Link>
+              </li>
+              
+              <li className="nav-item">
+                <Link className="nav-link active " to="/contact" style={{marginRight: '5rem'}}>
                   Contact
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link " to="/pricing" style={{marginRight: '10rem'}}>
-                  Pricing
+                <Link className="nav-link active " to="/about-us" style={{marginRight: '5rem'}}>
+                  About us
                 </Link>
               </li>
-              <li className="nav-item dropdown">
+              {/* <li className="nav-item dropdown"> When logged in, this to "My Account"
                 <Link
                   className="nav-link dropdown-toggle "
                   to="#"
@@ -69,7 +79,7 @@ function Layout() {
                     </Link>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
