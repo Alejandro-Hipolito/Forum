@@ -1,7 +1,8 @@
 from . import db 
 from flask_login import UserMixin #Implements properties and methods of flask-login to make it easier
-
+from flask_sqlalchemy import SQLAlchemy
 from enum import Enum
+from flask_migrate import Migrate
 
 
 class UserRole(Enum):
@@ -25,7 +26,22 @@ class User(db.Model, UserMixin):
     avatar = db.Column(db.Integer, db.ForeignKey('image.id'))
     # role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
 
+def __repr__(self):
+    return f'<User {self.email}>'
 
+def serialize(self): #Return the object serialized in dict/JSON 
+    return{
+        "id": self.id,
+        "username": self.username,
+        "email": self.email,
+        "phone": self.phone,
+        "is_active": self.is_active,
+        "role": self.role,
+        "avatar": self.avatar
+    }
+
+    
+    
     
 
 # class Role(db.Model):
@@ -39,7 +55,7 @@ class Image(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
-
+    
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,3 +76,15 @@ class Reply(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    
+    
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), unique=True)
+    # parent_id = db.Column(db.Integer, db.ForeignKey())
+    
+class Subcategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), unique=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
