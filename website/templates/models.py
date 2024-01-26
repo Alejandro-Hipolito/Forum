@@ -2,6 +2,7 @@ from . import db
 from flask_login import UserMixin #Implements properties and methods of flask-login to make it easier
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum
+from flask_migrate import Migrate
 
 
 class UserRole(Enum):
