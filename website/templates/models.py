@@ -26,19 +26,21 @@ class User(db.Model, UserMixin):
     avatar = db.Column(db.Integer, db.ForeignKey('image.id'))
     # role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
 
-def __repr__(self):
-    return f'<User {self.email}>'
+    def __repr__(self):
+        return f'<User {self.email}>'
 
-def serialize(self): #Return the object serialized in dict/JSON 
-    return{
-        "id": self.id,
-        "username": self.username,
-        "email": self.email,
-        "phone": self.phone,
-        "is_active": self.is_active,
-        "role": self.role,
-        "avatar": self.avatar
-    }
+    def serialize(self): #Return the object serialized in dict/JSON 
+        return{
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "phone": self.phone,
+            "is_active": self.is_active,
+            "role": self.role.value if self.role else None,
+            "avatar": self.avatar
+        }
+    
+
 
     
     

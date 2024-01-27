@@ -35,3 +35,9 @@ def signup():
     return jsonify({'msg':'User registered successfully'}), 201
     
 
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    
+    serialized_users = [user.serialize() for user in users]
+    return jsonify({'users': serialized_users})
