@@ -56,6 +56,18 @@ class Image(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    
+    def __repr__(self):
+        return f'<Image {self.id}>'
+    
+    def serialize(self):
+        return{
+            "id": self.id,
+            "url": self.url,
+            "user_id": self.user_id,
+            "post_id": self.post_id
+            
+        }
 
     
 
@@ -67,8 +79,25 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #------One to many relationships------
-    images = db.relationship('Image', backref='post') #
-    replies = db.relationship('Reply', backref='post') 
+    images = db.relationship('Image', backref='post', cascade="all, delete-orphan") #cascade parameter = if a post is deleted, it's imgs and replies too
+    replies = db.relationship('Reply', backref='post', cascade="all, delete-orphan") 
+    
+    
+    def __repr__(self):
+        return f'<Post {self.id}'
+    
+    def serialize(self):
+        return{
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "user_id": self.user_id,
+            # "images": self.images,
+            "images": [image.serialize() for image in self.images],
+            "replies": self.replies
+        }
+
+        
     
 
 
@@ -79,14 +108,46 @@ class Reply(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     
+    def __repr__(self):
+        return f'<Reply {self.id}'
+    
+    def serialize(self):
+        return{
+            "id": self.id,
+            "text": self.text,
+            "user_id": self.user_id,
+            "post_id": self.post_id
+        }
+    
     
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=True)
     # parent_id = db.Column(db.Integer, db.ForeignKey())
+    subcategory = db.relationship('Subcategory', backref='category')
+    
+    def __repr__(self):
+        return f'<Category {self.id}'
+    
+    def serialize(self):
+        return{
+            "id": self.id,
+            "name": self.name,
+            "subcategory": self.subcategory
+        }
     
 class Subcategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    
+    def __repr__(self):
+        return f'<Category {self.id}'
+    
+    def serialize(self):
+        return{
+            "id": self.id,
+            "name": self.name,
+            "category_id": self.category_id
+        }
