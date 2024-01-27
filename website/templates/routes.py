@@ -41,3 +41,17 @@ def get_users():
     
     serialized_users = [user.serialize() for user in users]
     return jsonify({'users': serialized_users})
+
+
+@api.route('/user/<int:id>', methods=['DELETE'])
+#@jwt_required
+def del_user(id):
+    user = User.query.get(id) #User searched by their id
+    
+    if user is None:
+        return jsonify({'msg':f'None of the existing users have the id={id}'})
+    
+    db.session.delete(user)
+    db.session.commit()
+    
+    return jsonify({'msg':f'The user with the id={id} has been successfully deleted'})
