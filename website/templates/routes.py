@@ -55,6 +55,43 @@ def get_user(id):
     return jsonify(serialized_user), 200
     
     
+@api.route('/user/<int:id>/modify', methods=['PUT'])
+def edit_user(id):
+    
+    user = User.query.get(id) #Modify in the future, change id to JWT
+    
+    if user is None:
+        return jsonify({'msg':f'None of the existing users have the id={id}'}), 401
+    
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    phone = data.get('phone')
+    #change of password have to be with more security, not here
+    avatar = data.get('avatar')
+    
+    if username:
+        user.username = username 
+        
+    if email:
+        user.email = email
+        
+    if phone:
+        user.phone = phone
+        
+    if avatar:
+        user.avatar = avatar
+        
+    try:
+        db.session.commit()
+        return jsonify({'msg':'User updated successfully'}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'msg': f'Error updating user: {str(e)}'}), 500
+    
+    
+    
 
 
 @api.route('/user/<int:id>', methods=['DELETE'])
