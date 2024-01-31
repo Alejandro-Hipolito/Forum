@@ -8,6 +8,8 @@ app = Flask(__name__)
 api = Blueprint('api', __name__)
 
 
+#-------------------- USER --------------------
+
 @api.route('/signup', methods=['POST'])
 def signup():
     
@@ -106,3 +108,49 @@ def del_user(id):
     db.session.commit()
     
     return jsonify({'msg':f'The user with the id={id} ({user.username}) has been successfully deleted'}), 200
+
+
+
+
+#-------------------- POST --------------------
+
+@api.route('/create-post', methods=['POST'])
+def create_post():
+    data = request.get_json()
+
+    title = data.get('title')
+    description = data.get('description')
+    created_by = data.get('user_id')
+    images_data = data.get('images')
+    replies_data = data.get('replies')
+
+    if created_by is None:
+        return jsonify({'msg': f'None of the existing users have the id={id} ({created_by})'})
+
+    # Verificar si images_data y replies_data son None antes de iterar
+    images = [Image(url=image_data['url']) for image_data in images_data] if images_data else []
+    replies = [Reply(text=reply_data['text']) for reply_data in replies_data] if replies_data else []
+
+    # Creación del post con objetos Image y Reply
+    new_post = Post(
+        title=title,
+        description=description,
+        user_id=created_by,
+        images=images,
+        replies=replies
+    )
+
+    db.session.add(new_post)
+    db.session.commit()
+
+    return jsonify({'msg': 'The post has been created successfully'})
+
+
+@api.route('/posts', methods=['GET'])
+def get_posts():
+    
+    posts = Post.query.all()
+    
+    serialized_posts = [post.serialize() for post in posts]
+    
+    return jsonify({'posts':serialized_posts})

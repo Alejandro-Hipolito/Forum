@@ -73,7 +73,7 @@ class Image(db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(2500), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -89,12 +89,12 @@ class Post(db.Model):
     def serialize(self):
         return{
             "id": self.id,
-            "name": self.name,
+            "title": self.title,
             "description": self.description,
             "user_id": self.user_id,
             # "images": self.images,
             "images": [image.serialize() for image in self.images],
-            "replies": self.replies
+            "replies": [reply.serialize() for reply in self.replies]
         }
 
         
