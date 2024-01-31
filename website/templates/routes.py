@@ -57,7 +57,7 @@ def get_user(id):
     
 @api.route('/user/<int:id>/modify', methods=['PUT'])
 def edit_user(id):
-    
+#@jwt_required --- Future
     user = User.query.get(id) #Modify in the future, change id to JWT
     
     if user is None:
@@ -105,4 +105,4 @@ def del_user(id):
     db.session.delete(user)
     db.session.commit()
     
-    return jsonify({'msg':f'The user with the id={id} has been successfully deleted'}), 200
+    return jsonify({'msg':f'The user with the id={id} ({user.username}) has been successfully deleted'}), 200

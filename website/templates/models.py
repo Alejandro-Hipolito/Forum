@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(150), nullable=False, unique=True)
     phone = db.Column(db.Integer)
-    password = db.Column(db.String(150))
+    password = db.Column(db.String(150), nullable=False)
     is_active = db.Column(db.Boolean, default=False)
     role = db.Column(db.Enum(UserRole), default=UserRole.BASIC)
 
