@@ -154,3 +154,18 @@ def get_posts():
     serialized_posts = [post.serialize() for post in posts]
     
     return jsonify({'posts':serialized_posts})
+
+
+@api.route('/delete-post/<int:id>', methods=['DELETE'])
+def delete_post(id):
+    
+    post = Post.query.get(id)
+    
+    if post is None:
+        return jsonify({"msg":f'The post with the id={id} does not exist.'})
+    
+    db.session.delete(post)
+    db.session.commit()
+    
+    return jsonify({'msg':f'The post with the id={id} "{post.title}" has been successfully deleted'})
+    
