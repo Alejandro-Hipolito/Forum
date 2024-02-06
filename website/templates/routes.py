@@ -169,3 +169,90 @@ def delete_post(id):
     
     return jsonify({'msg':f'The post with the id={id} "{post.title}" has been successfully deleted'})
     
+    
+@api.route('/post/<int:id>', methods=['GET'])
+def get_post(id):
+    
+    post = Post.query.filter_by(id=id).first()
+    
+    if post is None:
+        return jsonify({'msg':f'Post not found (id={id})'})
+    
+    serialized_post = post.serialize()
+    
+    return jsonify(serialized_post), 200
+    
+    
+    
+    
+#-------------------- Categories --------------------
+
+@api.route('/create-category', methods=['POST'])
+def create_category():
+#@jwt_required
+
+    data = request.get_json()
+    
+    name = data.get('name')
+    
+    if name is None:
+        return jsonify({'msg':'Please, provide a name for the category.'})
+    
+    new_category = Category(name=name)
+    
+    db.session.add(new_category)
+    db.session.commit()
+
+    return jsonify({'msg':f'Category "{new_category.name}" has been created successfully! '})
+
+
+@api.route('/create-categories', methods=['POST'])
+def create_categories():
+
+    data=request.get_json()
+    
+    names = data.get('names')
+    
+    if names is None or not isinstance(names, list):                                                                                                                
+        return jsonify({'msg': 'Please provide a list of names for the categories.'})
+    
+    created_categories = []
+    
+    for name in names:
+        if not name:
+            return jsonify({'msg':'Category name cannot be empty.'})
+        
+        new_category = Category(name=name)
+        db.session.add(new_category)
+        created_categories.append(new_category)
+    
+    #Out of the loop, otherwise, only 1 category would be added
+    db.session.commit() 
+        
+    return jsonify({'msg':'Categories added successfully!'})
+
+
+@api.route('/categories', methods=['GET'])
+def get_categories():
+    
+    categories = Category.query.all()
+    
+    serialized_categories = [category.serialize() for category in categories]
+    
+    return jsonify(serialized_categories)
+    
+    
+@api.route('/delete-category/<string:name>', methods=['DELETE'])
+def delete_category(name):
+    
+    category = Category.query.filter_by(name=name).first()
+    
+    if category is None:
+        return jsonify({'msg':f'The category {name} does not exist.'})
+    
+    db.session.delete(category)
+    db.session.commit()
+    
+    return jsonify({'msg':f'The category {name} has been deleted!'})
+    
+    

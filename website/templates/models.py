@@ -76,7 +76,8 @@ class Post(db.Model):
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(2500), nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
 
     #------One to many relationships------
     images = db.relationship('Image', backref='post', cascade="all, delete-orphan") #cascade parameter = if a post is deleted, it's imgs and replies too
@@ -92,6 +93,7 @@ class Post(db.Model):
             "title": self.title,
             "description": self.description,
             "user_id": self.user_id,
+            "category_id": self.category_id,
             # "images": self.images,
             "images": [image.serialize() for image in self.images],
             "replies": [reply.serialize() for reply in self.replies]
@@ -123,7 +125,7 @@ class Reply(db.Model):
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), unique=True)
+    name = db.Column(db.String(20), unique=True, nullable=False)
     # parent_id = db.Column(db.Integer, db.ForeignKey())
     subcategory = db.relationship('Subcategory', backref='category')
     
